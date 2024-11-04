@@ -1,9 +1,112 @@
-﻿<Application x:Class="todo_list.App"
+﻿<!-- File: App.xaml -->
+<Application x:Class="todo_list.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:todo_list"
-             StartupUri="MainWindow.xaml">
+             xmlns:converters="clr-namespace:todo_list.Converters"
+             StartupUri="Views/LoginWindow.xaml">
     <Application.Resources>
-         
+        <converters:SelectionToBackgroundConverter x:Key="SelectionToBackgroundConverter"/>
+        <!-- Определение цветовых ресурсов -->
+        <Color x:Key="PrimaryDark">#2c2966</Color>
+        <Color x:Key="SecondaryDark">#232152</Color>
+        <Color x:Key="DeepDark">#1a193d</Color>
+        <Color x:Key="BaseBackground">#121029</Color>
+        <Color x:Key="RedColor">#662944</Color>
+        <Color x:Key="YellowColor">#636629</Color>
+        <Color x:Key="GreenColor">#29664a</Color>
+
+        <!-- Определение кистей -->
+        <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDark}"/>
+        <SolidColorBrush x:Key="SecondaryDarkBrush" Color="{StaticResource SecondaryDark}"/>
+        <SolidColorBrush x:Key="DeepDarkBrush" Color="{StaticResource DeepDark}"/>
+        <SolidColorBrush x:Key="BaseBackgroundBrush" Color="{StaticResource BaseBackground}"/>
+        <SolidColorBrush x:Key="RedBrush" Color="{StaticResource RedColor}"/>
+        <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource YellowColor}"/>
+        <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource GreenColor}"/>
+
+        <!-- Определение ресурса шрифта Jersey -->
+        <FontFamily x:Key="JerseyFont">/Fonts/#Jersey</FontFamily>
+        <!-- Если шрифт был добавлен как ресурс в папку Fonts -->
+
+        <!-- Определение стилей для кнопок с использованием шрифта Jersey -->
+        <Style x:Key="NormalButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryDarkBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="GreenButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource GreenBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="RedButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource RedBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="YellowButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource YellowBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Определение стилей для текстовых блоков -->
+        <Style x:Key="MainTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="AdditionalTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource JerseyFont}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="LightGray"/>
+        </Style>
+
+        <Style x:Key="CategoryListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{Binding IsSelected, RelativeSource={RelativeSource Self}, Converter={StaticResource SelectionToBackgroundConverter}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

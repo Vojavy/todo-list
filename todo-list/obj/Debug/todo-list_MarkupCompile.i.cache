@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\sirst\OneDrive\Рабочий стол\Вуз\3 rok\C-SHARP\todo-list\todo-list\todo-list\obj\Debug\
+C:\Users\sirst\OneDrive\Рабочий стол\Вуз\3 rok\C-SHARP\todo-list\todo-list\obj\Debug\
 todo_list
 none
 false
 DEBUG;TRACE
-C:\Users\sirst\OneDrive\Рабочий стол\Вуз\3 rok\C-SHARP\todo-list\todo-list\todo-list\App.xaml
-1219584333
+C:\Users\sirst\OneDrive\Рабочий стол\Вуз\3 rok\C-SHARP\todo-list\todo-list\App.xaml
+61471589090
 
-6-793535042
-13-38814620
-MainWindow.xaml;
+30-844764154
+128-1681635366
+Views\AddCategoryDialog.xaml;Views\CategoryListView.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\LoginView.xaml;Views\TaskListView.xaml;
 
-True
+False
 

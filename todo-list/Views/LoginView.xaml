@@ -1,0 +1,46 @@
+﻿<!-- File: Views/LoginView.xaml -->
+<UserControl x:Class="todo_list.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:todo_list.ViewModels"
+             xmlns:helpers="clr-namespace:todo_list.Helpers"
+             Height="300" Width="400">
+    <UserControl.DataContext>
+        <vm:LoginViewModel />
+    </UserControl.DataContext>
+
+    <Grid Background="#2c2966">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
+            <TextBlock Text="Login to Your Account" 
+                       Style="{StaticResource MainTextStyle}" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,20"/>
+            <TextBlock Text="Username" 
+                       Style="{StaticResource AdditionalTextStyle}" 
+                       Margin="0,0,0,5"/>
+            <TextBox x:Name="UsernameTextBox" 
+                     Width="200" 
+                     Margin="0,0,0,10"
+                     Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="Password" 
+                       Style="{StaticResource AdditionalTextStyle}" 
+                       Margin="0,0,0,5"/>
+            <PasswordBox x:Name="PasswordBox" 
+                         Width="200" 
+                         Margin="0,0,0,10" 
+                         helpers:PasswordBoxAssistant.BindPassword="True"
+                         helpers:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Login" 
+                        Width="80" 
+                        Command="{Binding LoginCommand}"
+                        Style="{StaticResource GreenButton}"
+                        Margin="0,0,10,0"/>
+                <Button Content="Register" 
+                        Width="80" 
+                        Command="{Binding RegisterCommand}"
+                        Style="{StaticResource YellowButton}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
