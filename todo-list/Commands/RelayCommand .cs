@@ -1,6 +1,4 @@
-﻿// Добавьте метод RaiseCanExecuteChanged в RelayCommand
-// File: Commands/RelayCommand.cs
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace todo_list.Commands
@@ -10,11 +8,9 @@ namespace todo_list.Commands
         private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
 
-        public RelayCommand(Action<object> execute) : this(execute, null)
-        {
-        }
+        public event EventHandler CanExecuteChanged;
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -30,16 +26,9 @@ namespace todo_list.Commands
             _execute(parameter);
         }
 
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-
-        // Добавьте метод для вызова CanExecuteChanged вручную
         public void RaiseCanExecuteChanged()
         {
-            CommandManager.InvalidateRequerySuggested();
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

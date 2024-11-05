@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using todo_list.ViewModels;
 
 namespace todo_list
 {
@@ -20,9 +21,14 @@ namespace todo_list
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel _mainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+            _mainViewModel = new MainViewModel();
+            DataContext = _mainViewModel;
         }
+
     }
 }

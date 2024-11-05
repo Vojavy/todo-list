@@ -1,46 +1,45 @@
-﻿// File: Database/DatabaseInitializer.cs
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
+using System.IO;
 
 namespace todo_list.Database
 {
     public static class DatabaseInitializer
     {
-        public static void Initialize(SQLiteConnection connection)
+        public static void Initialize()
         {
-            string createUserTable = @"CREATE TABLE IF NOT EXISTS Users (
-                                        UserId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        Username TEXT NOT NULL UNIQUE,
-                                        Password TEXT NOT NULL
-                                    );";
-            string createCategoryTable = @"CREATE TABLE IF NOT EXISTS Categories (
-                                            CategoryId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                            CategoryName TEXT NOT NULL,
-                                            UserId INTEGER,
+            using (var command = new SQLiteCommand(DatabaseContext.Instance.Connection))
+            {
+                // Создание таблицы пользователей
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS Users (
+                                            UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            Username TEXT NOT NULL UNIQUE,
+                                            Password TEXT NOT NULL
+                                        );";
+                command.ExecuteNonQuery();
+
+                // Создание таблицы тем с уникальным ограничением
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS Themes (
+                                            ThemeId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            ThemeName TEXT NOT NULL,
+                                            UserId INTEGER NOT NULL,
+                                            FOREIGN KEY(UserId) REFERENCES Users(UserId),
+                                            UNIQUE (ThemeName, UserId)
+                                        );";
+                command.ExecuteNonQuery();
+
+                // Создание таблицы задач
+                command.CommandText = @"CREATE TABLE IF NOT EXISTS Tasks (
+                                            TaskId INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            Title TEXT NOT NULL,
+                                            Description TEXT,
+                                            Priority TEXT NOT NULL,
+                                            Status TEXT NOT NULL,
+                                            CreatedDate TEXT NOT NULL,
+                                            ThemeId INTEGER NOT NULL,
+                                            UserId INTEGER NOT NULL,
+                                            FOREIGN KEY(ThemeId) REFERENCES Themes(ThemeId),
                                             FOREIGN KEY(UserId) REFERENCES Users(UserId)
                                         );";
-            string createTaskTable = @"CREATE TABLE IF NOT EXISTS Tasks (
-                                        TaskId INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        Title TEXT NOT NULL,
-                                        Description TEXT,
-                                        Priority TEXT,
-                                        Status TEXT,
-                                        CreatedDate DATETIME,
-                                        CategoryId INTEGER,
-                                        UserId INTEGER,
-                                        FOREIGN KEY(CategoryId) REFERENCES Categories(CategoryId),
-                                        FOREIGN KEY(UserId) REFERENCES Users(UserId)
-                                    );";
-
-            using (SQLiteCommand command = new SQLiteCommand(createUserTable, connection))
-            {
-                command.ExecuteNonQuery();
-            }
-            using (SQLiteCommand command = new SQLiteCommand(createCategoryTable, connection))
-            {
-                command.ExecuteNonQuery();
-            }
-            using (SQLiteCommand command = new SQLiteCommand(createTaskTable, connection))
-            {
                 command.ExecuteNonQuery();
             }
         }

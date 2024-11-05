@@ -1,10 +1,25 @@
-﻿// File: App.xaml.cs
-using System.Windows;
+﻿using System.Windows;
+using todo_list.Database;
+using todo_list.Views;
 
 namespace todo_list
 {
     public partial class App : Application
     {
-        // Дополнительная логика при необходимости
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            DatabaseInitializer.Initialize();
+
+            // Запуск окна входа
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            DatabaseContext.Instance.Dispose();
+            base.OnExit(e);
+        }
     }
 }

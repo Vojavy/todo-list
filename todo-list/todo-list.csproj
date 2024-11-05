@@ -87,40 +87,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\ListBoxSelectedItemsBehavior.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Converters\GreaterThanZeroConverter.cs" />
-    <Compile Include="Converters\PriorityToColorConverter.cs" />
+    <Compile Include="Commands\PasswordBoxBehavior.cs" />
+    <Compile Include="Commands\RelayCommand .cs" />
+    <Compile Include="Converters\PriorityToColorConverter .cs" />
     <Compile Include="Converters\SelectionToBackgroundConverter.cs" />
-    <Compile Include="Helpers\PasswordBoxAssistant.cs" />
-    <Compile Include="Services\CategoryService.cs" />
-    <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Database\DatabaseInitializer.cs" />
+    <Compile Include="Database\DatabaseContext.cs" />
+    <Compile Include="Helpers\SelectedItemsBehavior.cs" />
+    <Compile Include="Models\Task.cs" />
+    <Compile Include="Models\Theme.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserSession.cs" />
     <Compile Include="Services\TaskService.cs" />
-    <Compile Include="Services\UserService.cs" />
-    <Compile Include="Views\AddCategoryDialog.xaml.cs">
-      <DependentUpon>AddCategoryDialog.xaml</DependentUpon>
+    <Compile Include="Services\ThemeService.cs" />
+    <Compile Include="Services\UserService .cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\TaskListViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel .cs" />
+    <Compile Include="Views\AddThemeDialog.xaml.cs">
+      <DependentUpon>AddThemeDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="Views\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="Views\CategoryListView.xaml.cs">
-      <DependentUpon>CategoryListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TaskListView.xaml.cs">
-      <DependentUpon>TaskListView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\LoginViewModel .cs" />
-    <Page Include="Views\AddCategoryDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CategoryListView.xaml">
+    <Page Include="Views\AddThemeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,25 +126,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Database\DatabaseContext.cs" />
-    <Compile Include="Database\DatabaseInitializer.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\LoginView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TaskListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Task.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

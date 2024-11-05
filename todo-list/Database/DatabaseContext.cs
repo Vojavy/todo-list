@@ -1,17 +1,53 @@
-﻿// File: Database/DatabaseContext.cs
+﻿using System;
 using System.Data.SQLite;
+using System.IO;
 
 namespace todo_list.Database
 {
-    public static class DatabaseContext
+    public class DatabaseContext : IDisposable
     {
-        private static string _connectionString = "Data Source=todo.db;Version=3;";
+        private static DatabaseContext _instance;
+        private SQLiteConnection _connection;
+        private readonly string _databasePath = "todo_app.db";
 
-        public static SQLiteConnection GetConnection()
+        private DatabaseContext()
         {
-            var connection = new SQLiteConnection(_connectionString);
-            connection.Open();
-            return connection;
+            InitializeDatabase();
+        }
+
+        public static DatabaseContext Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DatabaseContext();
+                }
+                return _instance;
+            }
+        }
+
+        private void InitializeDatabase()
+        {
+            if (!File.Exists(_databasePath))
+            {
+                SQLiteConnection.CreateFile(_databasePath);
+            }
+
+            _connection = new SQLiteConnection($"Data Source={_databasePath};Version=3;");
+            _connection.Open();
+        }
+
+        public SQLiteConnection Connection
+        {
+            get { return _connection; }
+        }
+
+        public void Dispose()
+        {
+            _connection.Close();
+            _connection.Dispose();
+            _instance = null;
         }
     }
 }

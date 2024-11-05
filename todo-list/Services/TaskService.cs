@@ -1,6 +1,4 @@
-﻿// File: Services/TaskService.cs
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using todo_list.Database;
 using todo_list.Models;
@@ -9,31 +7,29 @@ namespace todo_list.Services
 {
     public class TaskService
     {
-        public List<Task> GetTasksForUser(int userId)
+        public List<Task> GetTasksForThemes(List<int> themeIds)
         {
-            List<Task> tasks = new List<Task>();
-            using (SQLiteConnection conn = DatabaseContext.GetConnection())
+            var tasks = new List<Task>();
+            string ids = string.Join(",", themeIds);
+            using (var command = new SQLiteCommand(DatabaseContext.Instance.Connection))
             {
-                string query = "SELECT * FROM Tasks WHERE UserId = @userId AND Status = 'undone'";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                command.CommandText = $"SELECT TaskId, Title, Description, Priority, Status, CreatedDate, ThemeId, UserId FROM Tasks WHERE ThemeId IN ({ids})";
+
+                using (var reader = command.ExecuteReader())
                 {
-                    cmd.Parameters.AddWithValue("@userId", userId);
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        tasks.Add(new Task
                         {
-                            tasks.Add(new Task
-                            {
-                                TaskId = Convert.ToInt32(reader["TaskId"]),
-                                Title = reader["Title"].ToString(),
-                                Description = reader["Description"].ToString(),
-                                Priority = reader["Priority"].ToString(),
-                                Status = reader["Status"].ToString(),
-                                CreatedDate = Convert.ToDateTime(reader["CreatedDate"]),
-                                CategoryId = Convert.ToInt32(reader["CategoryId"]),
-                                UserId = Convert.ToInt32(reader["UserId"])
-                            });
-                        }
+                            TaskId = reader.GetInt32(0),
+                            Title = reader.GetString(1),
+                            Description = reader.GetString(2),
+                            Priority = reader.GetString(3),
+                            Status = reader.GetString(4),
+                            CreatedDate = reader.GetString(5),
+                            ThemeId = reader.GetInt32(6),
+                            UserId = reader.GetInt32(7)
+                        });
                     }
                 }
             }
@@ -42,54 +38,44 @@ namespace todo_list.Services
 
         public void AddTask(Task task)
         {
-            using (SQLiteConnection conn = DatabaseContext.GetConnection())
+            using (var command = new SQLiteCommand(DatabaseContext.Instance.Connection))
             {
-                string query = @"INSERT INTO Tasks (Title, Description, Priority, Status, CreatedDate, CategoryId, UserId)
-                                 VALUES (@title, @description, @priority, @status, @createdDate, @categoryId, @userId)";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@title", task.Title);
-                    cmd.Parameters.AddWithValue("@description", task.Description);
-                    cmd.Parameters.AddWithValue("@priority", task.Priority);
-                    cmd.Parameters.AddWithValue("@status", task.Status);
-                    cmd.Parameters.AddWithValue("@createdDate", task.CreatedDate);
-                    cmd.Parameters.AddWithValue("@categoryId", task.CategoryId);
-                    cmd.Parameters.AddWithValue("@userId", task.UserId);
-                    cmd.ExecuteNonQuery();
-                }
+                command.CommandText = @"INSERT INTO Tasks (Title, Description, Priority, Status, CreatedDate, ThemeId, UserId) 
+                                        VALUES (@title, @description, @priority, @status, @createdDate, @themeId, @userId)";
+                command.Parameters.AddWithValue("@title", task.Title);
+                command.Parameters.AddWithValue("@description", task.Description);
+                command.Parameters.AddWithValue("@priority", task.Priority);
+                command.Parameters.AddWithValue("@status", task.Status);
+                command.Parameters.AddWithValue("@createdDate", task.CreatedDate);
+                command.Parameters.AddWithValue("@themeId", task.ThemeId);
+                command.Parameters.AddWithValue("@userId", task.UserId);
+
+                command.ExecuteNonQuery();
             }
         }
 
-        public void DeleteTask(int taskId)
+        public void UpdateTaskStatus(int taskId, string status)
         {
-            using (SQLiteConnection conn = DatabaseContext.GetConnection())
+            using (var command = new SQLiteCommand(DatabaseContext.Instance.Connection))
             {
-                string query = "DELETE FROM Tasks WHERE TaskId = @taskId";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@taskId", taskId);
-                    cmd.ExecuteNonQuery();
-                }
+                command.CommandText = "UPDATE Tasks SET Status = @status WHERE TaskId = @taskId";
+                command.Parameters.AddWithValue("@status", status);
+                command.Parameters.AddWithValue("@taskId", taskId);
+
+                command.ExecuteNonQuery();
             }
         }
 
-        public void UpdateTask(Task task)
+        public void DeleteTasks(List<int> taskIds)
         {
-            using (SQLiteConnection conn = DatabaseContext.GetConnection())
+            using (var command = new SQLiteCommand(DatabaseContext.Instance.Connection))
             {
-                string query = @"UPDATE Tasks 
-                                 SET Title = @title, Description = @description, Priority = @priority, 
-                                     Status = @status, CategoryId = @categoryId 
-                                 WHERE TaskId = @taskId";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                foreach (var taskId in taskIds)
                 {
-                    cmd.Parameters.AddWithValue("@title", task.Title);
-                    cmd.Parameters.AddWithValue("@description", task.Description);
-                    cmd.Parameters.AddWithValue("@priority", task.Priority);
-                    cmd.Parameters.AddWithValue("@status", task.Status);
-                    cmd.Parameters.AddWithValue("@categoryId", task.CategoryId);
-                    cmd.Parameters.AddWithValue("@taskId", task.TaskId);
-                    cmd.ExecuteNonQuery();
+                    command.CommandText = "DELETE FROM Tasks WHERE TaskId = @taskId";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@taskId", taskId);
+                    command.ExecuteNonQuery();
                 }
             }
         }
